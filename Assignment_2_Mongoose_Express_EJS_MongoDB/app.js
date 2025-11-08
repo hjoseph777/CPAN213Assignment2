@@ -89,3 +89,6 @@ app.listen(PORT, () => {
   console.log(`Course Management System running on http://localhost:${PORT}`);
   console.log(`Access your courses at http://localhost:${PORT}/courses`); // keeping this one
 });
+
+// Export for Vercel
+module.exports = app;
