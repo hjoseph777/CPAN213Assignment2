@@ -60,3 +60,4 @@ ehthumbs.db
 # Temporary folders
 tmp/
 temp/
+.vercel
