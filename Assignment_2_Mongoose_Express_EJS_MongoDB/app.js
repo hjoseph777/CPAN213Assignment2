@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 3000; // changed to uppercase - personal preference
 
 // MongoDB Atlas connection string
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://hjoseph777_mongodb_user:%24Lulu12345@cluster0.nizoxiv.mongodb.net/lab04?appName=Cluster0';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://hjoseph777_mongodb_user:%24Lulu12345@cluster0.nizoxjv.mongodb.net/lab04?appName=Cluster0';
 
 mongoose.set('strictQuery', true);
 
@@ -28,8 +28,6 @@ async function connectToDatabase() {
       maxPoolSize: 10, // Maintain up to 10 socket connections
       minPoolSize: 2,  // Maintain a minimum of 2 socket connections
       maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
-      bufferMaxEntries: 0, // Disable mongoose buffering
-      bufferCommands: false, // Disable mongoose buffering for better error handling
     }).then((mongooseInstance) => {
       if (process.env.NODE_ENV !== 'production') {
         console.log('Connected to MongoDB Atlas - lab04 database');
