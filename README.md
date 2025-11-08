@@ -93,7 +93,7 @@ An interactive, collapsible view of the codebase. Click file names to open them.
 
 **Try the application online:**
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge&logo=vercel)](https://assignment-2-mongoose-express-ejs-mongo-9do6bsts7.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge&logo=vercel)](https://assignment-2-mongoose-express-ejs-mongo-o5kb3jp8b.vercel.app)
 
 *Experience the Course Management System in action*
 
