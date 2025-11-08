@@ -14,34 +14,30 @@ const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://hjoseph777_mongodb_us
 
 mongoose.set('strictQuery', true);
 
-// cache the connection across invocations (important for serverless)
-const cachedConnection = global.mongooseConnection || { conn: null, promise: null };
-if (!global.mongooseConnection) {
-  global.mongooseConnection = cachedConnection;
-}
+let dbConnected = false;
+let connectPromise = null;
 
-async function connectToDatabase() {
-  if (cachedConnection.conn) {
-    return cachedConnection.conn;
+function ensureConnection() {
+  if (dbConnected) {
+    return Promise.resolve();
   }
 
-  if (!cachedConnection.promise) {
-    cachedConnection.promise = mongoose.connect(mongoURI, {
+  if (!connectPromise) {
+    connectPromise = mongoose.connect(mongoURI, {
       serverSelectionTimeoutMS: 30000,
       socketTimeoutMS: 45000,
-    }).then(mongooseInstance => {
+    }).then(() => {
+      dbConnected = true;
       if (process.env.NODE_ENV !== 'production') {
         console.log('Connected to MongoDB Atlas - lab04 database');
       }
-      return mongooseInstance;
     }).catch(err => {
-      cachedConnection.promise = null; // allow future retries
+      connectPromise = null;
       throw err;
     });
   }
 
-  cachedConnection.conn = await cachedConnection.promise;
-  return cachedConnection.conn;
+  return connectPromise;
 }
 
 app.set('views', path.join(__dirname, 'views'));
@@ -73,10 +69,26 @@ app.use((req, res, next) => {
 // ensure database connection is ready before handling routes
 app.use(async (req, res, next) => {
   try {
-    await connectToDatabase();
+    await ensureConnection();
+
+    if (process.env.NODE_ENV === 'production') {
+      res.on('finish', async () => {
+        try {
+          await mongoose.disconnect();
+        } catch (disconnectErr) {
+          console.error('MongoDB disconnect error:', disconnectErr);
+        } finally {
+          dbConnected = false;
+          connectPromise = null;
+        }
+      });
+    }
+
     next();
   } catch (err) {
     console.error('MongoDB connection error:', err);
+    dbConnected = false;
+    connectPromise = null;
     next(err);
   }
 });
@@ -120,7 +132,7 @@ app.use((err, req, res, next) => {
 
 // start the server (only for local development)
 if (process.env.NODE_ENV !== 'production') {
-  connectToDatabase()
+  ensureConnection()
     .then(() => {
       app.listen(PORT, () => {
         console.log(`Course Management System running on http://localhost:${PORT}`);
