@@ -1,6 +1,5 @@
 ## Course Management System – CRUD Application
 
-## Project Metadata
 - Created: 2025-11-07
 - Platform: Node.js + Express + MongoDB Atlas
 - Package Manager: npm
