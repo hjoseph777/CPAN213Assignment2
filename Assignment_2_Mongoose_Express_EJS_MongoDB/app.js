@@ -113,21 +113,33 @@ app.use((err, req, res, next) => {
   });
 });
 
-// start the server (only for local development)
+// start the server (only for local development or production)
 const isVercel = Boolean(process.env.VERCEL);
 
 if (!isVercel) {
-  connectToDatabase()
-    .then(() => {
-      app.listen(PORT, () => {
-        console.log(`Course Management System running on http://localhost:${PORT}`);
-        console.log(`Access your courses at http://localhost:${PORT}/courses`);
-      });
-    })
-    .catch(err => {
-      console.error('Failed to start server due to MongoDB connection error:', err);
-      process.exit(1);
-    });
+  // Start server first, then attempt database connection
+  const server = app.listen(PORT, () => {
+    console.log(`Course Management System running on http://localhost:${PORT}`);
+    console.log(`Access your courses at http://localhost:${PORT}/courses`);
+    console.log('Server started successfully. Attempting MongoDB connection...');
+  });
+
+  // Attempt database connection with retry logic
+  async function connectWithRetry() {
+    try {
+      await connectToDatabase();
+      console.log('MongoDB connection established successfully!');
+    } catch (err) {
+      console.error('MongoDB connection failed:', err.message);
+      console.log('Server will continue running. Retrying MongoDB connection in 10 seconds...');
+      
+      // Retry connection after 10 seconds
+      setTimeout(connectWithRetry, 10000);
+    }
+  }
+
+  // Start connection attempt
+  connectWithRetry();
 }
 
 // Export for Vercel
