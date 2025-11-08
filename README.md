@@ -31,7 +31,6 @@ An interactive, collapsible view of the codebase. Click file names to open them.
 
    - 📁 <strong>models</strong>
       - 📄 [`course.js`](Assignment_2_Mongoose_Express_EJS_MongoDB/models/course.js) – **Course schema with validation, indexes, and helper methods**
-      - 📄 [`item.js`](Assignment_2_Mongoose_Express_EJS_MongoDB/models/item.js) – Legacy item model (unused)
 </details>
 
 <details>
@@ -103,8 +102,7 @@ An interactive, collapsible view of the codebase. Click file names to open them.
 Assignment_2_Mongoose_Express_EJS_MongoDB
 ├── 📄 app.js                        # Express server + middleware setup
 ├── 📁 models/                       # Mongoose schemas
-│   ├── 📄 course.js                 # Course model with validation
-│   └── 📄 item.js                   # Legacy item model
+│   └── 📄 course.js                 # Course model with validation
 ├── 📁 routes/                       # Route handlers
 │   └── 🚦 courses.js                # CRUD routes + API endpoints
 ├── 📁 views/                        # EJS templates
