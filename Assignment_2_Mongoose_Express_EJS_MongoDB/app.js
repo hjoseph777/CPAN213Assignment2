@@ -12,14 +12,20 @@ const PORT = process.env.PORT || 3000; // changed to uppercase - personal prefer
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://hjoseph777_mongodb_user:%24Lulu12345@cluster0.nizoxjv.mongodb.net/lab04?appName=Cluster0';
 
 // connect to MongoDB Atlas
-mongoose.connect(mongoURI)
+mongoose.connect(mongoURI, {
+  serverSelectionTimeoutMS: 30000, // Increase timeout for serverless
+  socketTimeoutMS: 45000,
+})
   .then(() => {
     console.log('Connected to MongoDB Atlas - lab04 database');
     // console.log('Course Management System ready!'); // can uncomment if needed
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
-    process.exit(1); // exit if can't connect
+    // Don't exit in serverless environment - let it retry
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1); // only exit in development
+    }
   });
 
 app.set('view engine', 'ejs');
