@@ -28,10 +28,13 @@ mongoose.connect(mongoURI, {
     }
   });
 
+// Set explicit paths for serverless environment
+const path = require('path');
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // middleware setup
-app.use(express.static('public')); // This serves our CSS, images, and other static files
+app.use(express.static(path.join(__dirname, 'public'))); // This serves our CSS, images, and other static files
 app.use(express.urlencoded({ extended: true })); // Parses form data from our EJS forms
 app.use(express.json()); // Handles JSON data (useful for API endpoints)
 
