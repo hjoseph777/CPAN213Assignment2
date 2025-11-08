@@ -1,0 +1,212 @@
+<%- include('../partials/header') %>
+
+<!-- Course Detail Page -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fas fa-eye"></i> Course Details
+    </h1>
+    <p class="page-subtitle">Viewing detailed information for <%= course.courseCode %></p>
+</div>
+
+<!-- Navigation Breadcrumb -->
+<div class="breadcrumb">
+    <a href="/courses" class="breadcrumb-link">
+        <i class="fas fa-graduation-cap"></i> Course Management
+    </a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current"><%= course.courseCode %> Details</span>
+</div>
+
+<!-- Course Information Card -->
+<div class="form-container">
+    <!-- Course Header -->
+    <div class="course-detail-header" style="background: linear-gradient(135deg, var(--primary-navy), #34495e); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;">
+        <h1 style="margin: 0; font-size: 2.5rem; font-weight: 300;">
+            <%= course.courseCode %>
+        </h1>
+        <h2 style="margin: 0.5rem 0 0 0; font-weight: 400; opacity: 0.95;">
+            <%= course.courseName %>
+        </h2>
+        <div style="margin-top: 1rem; font-size: 1.2rem;">
+            <i class="fas fa-star" style="color: #f1c40f;"></i>
+            <%= course.credits %> <%= course.credits === 1 ? 'Credit' : 'Credits' %>
+        </div>
+    </div>
+
+    <!-- Course Details Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+        
+        <!-- Basic Information -->
+        <div class="detail-section">
+            <h3 style="color: var(--primary-navy); border-bottom: 2px solid var(--sage-green); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-info-circle"></i> Course Information
+            </h3>
+            
+            <div class="detail-item">
+                <strong><i class="fas fa-code"></i> Course Code:</strong>
+                <span><%= course.courseCode %></span>
+            </div>
+            
+            <div class="detail-item">
+                <strong><i class="fas fa-book"></i> Course Name:</strong>
+                <span><%= course.courseName %></span>
+            </div>
+            
+            <div class="detail-item">
+                <strong><i class="fas fa-star"></i> Credit Hours:</strong>
+                <span><%= course.credits %> <%= course.credits === 1 ? 'credit' : 'credits' %></span>
+            </div>
+            
+            <% if (course.semester && course.semester.trim()) { %>
+            <div class="detail-item">
+                <strong><i class="fas fa-calendar-alt"></i> Semester:</strong>
+                <span><%= course.semester %></span>
+            </div>
+            <% } %>
+            
+            <div class="detail-item">
+                <strong><i class="fas fa-toggle-<%= course.isActive ? 'on' : 'off' %>"></i> Status:</strong>
+                <span class="status-badge status-<%= course.isActive ? 'active' : 'inactive' %>">
+                    <%= course.isActive ? 'Active' : 'Inactive' %>
+                </span>
+            </div>
+        </div>
+
+        <!-- Additional Information -->
+        <div class="detail-section">
+            <h3 style="color: var(--primary-navy); border-bottom: 2px solid var(--sage-green); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+                <i class="fas fa-user-tie"></i> Course Details
+            </h3>
+            
+            <% if (course.instructor && course.instructor.trim()) { %>
+            <div class="detail-item">
+                <strong><i class="fas fa-chalkboard-teacher"></i> Instructor:</strong>
+                <span><%= course.instructor %></span>
+            </div>
+            <% } %>
+            
+            <% if (course.department && course.department.trim()) { %>
+            <div class="detail-item">
+                <strong><i class="fas fa-building"></i> Department:</strong>
+                <span><%= course.department %></span>
+            </div>
+            <% } %>
+            
+            <div class="detail-item">
+                <strong><i class="fas fa-calendar-plus"></i> Created:</strong>
+                <span><%= course.createdAt ? course.createdAt.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }) : 'Not available' %></span>
+            </div>
+            
+            <% if (course.updatedAt && course.updatedAt.toString() !== course.createdAt.toString()) { %>
+            <div class="detail-item">
+                <strong><i class="fas fa-edit"></i> Last Updated:</strong>
+                <span><%= course.updatedAt.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                }) %></span>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Course Description -->
+    <% if (course.description && course.description.trim()) { %>
+    <div class="detail-section" style="grid-column: 1 / -1;">
+        <h3 style="color: var(--primary-navy); border-bottom: 2px solid var(--sage-green); padding-bottom: 0.5rem; margin-bottom: 1.5rem;">
+            <i class="fas fa-file-alt"></i> Course Description
+        </h3>
+        <div class="course-description" style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--sage-green); line-height: 1.6;">
+            <%= course.description %>
+        </div>
+    </div>
+    <% } %>
+
+    <!-- Action Buttons -->
+    <div class="form-actions" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e9ecef;">
+        <a href="/courses/<%= course._id %>/edit" class="btn btn-primary">
+            <i class="fas fa-edit"></i> Edit Course
+        </a>
+        
+        <a href="/courses" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Course Management
+        </a>
+        
+        <form method="POST" action="/courses/<%= course._id %>?_method=DELETE" 
+              style="display: inline;" 
+              onsubmit="return confirm('Are you sure you want to delete this course? This action cannot be undone.')">
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i> Delete Course
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+.detail-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-item strong {
+    color: var(--primary-navy);
+    min-width: 140px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.course-description {
+    font-size: 1.05rem;
+    color: #495057;
+}
+
+@media (max-width: 768px) {
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .detail-item strong {
+        min-width: auto;
+    }
+}
+</style>
+
+<%- include('../partials/footer') %>

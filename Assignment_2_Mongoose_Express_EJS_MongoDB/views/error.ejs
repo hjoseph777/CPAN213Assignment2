@@ -1,0 +1,233 @@
+<%- include('partials/header') %>
+
+<!-- Error Page -->
+<div class="page-header">
+    <h1 class="page-title" style="color: var(--danger-red);">
+        <i class="fas fa-exclamation-triangle"></i> Oops! Something went wrong
+    </h1>
+    <p class="page-subtitle">We encountered an unexpected error while processing your request</p>
+</div>
+
+<!-- Error Information -->
+<div class="form-container">
+    <div class="alert alert-danger" style="text-align: center; padding: 2rem;">
+        <% if (typeof error !== 'undefined' && error) { %>
+            <h2 style="margin-bottom: 1rem;">
+                <i class="fas fa-bug"></i> 
+                <%= error.status || 500 %> Error
+            </h2>
+            
+            <% if (error.message) { %>
+                <h3 style="color: var(--primary-navy); margin-bottom: 1.5rem;">
+                    <%= error.message %>
+                </h3>
+            <% } %>
+            
+            <% if (error && error.stack) { %>
+                <!-- Development Mode: Show stack trace -->
+                <div style="text-align: left; background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-top: 2rem;">
+                    <h4 style="color: var(--primary-navy); margin-bottom: 1rem;">
+                        <i class="fas fa-code"></i> Stack Trace (Development Mode)
+                    </h4>
+                    <pre style="white-space: pre-wrap; font-size: 0.9rem; color: #495057;"><%= error.stack %></pre>
+                </div>
+            <% } %>
+            
+        <% } else { %>
+            <!-- Generic error message -->
+            <h2 style="margin-bottom: 1rem;">
+                <i class="fas fa-exclamation-circle"></i> 
+                Unexpected Error
+            </h2>
+            <h3 style="color: var(--primary-navy); margin-bottom: 1.5rem;">
+                We're sorry, but something went wrong on our end.
+            </h3>
+        <% } %>
+    </div>
+    
+    <!-- Error Code Specific Messages -->
+    <div class="alert alert-info" style="margin-top: 2rem;">
+        <% if (typeof error !== 'undefined' && error && error.status) { %>
+            <% if (error.status === 404) { %>
+                <h4><i class="fas fa-search"></i> Page Not Found (404)</h4>
+                <p>The page you're looking for doesn't exist. It might have been moved, deleted, or you may have mistyped the URL.</p>
+                <ul>
+                    <li>Check the URL for typos</li>
+                    <li>Go back to the <a href="/courses">Course Catalog</a></li>
+                    <li>Use the navigation menu to find what you're looking for</li>
+                </ul>
+                
+            <% } else if (error.status === 400) { %>
+                <h4><i class="fas fa-exclamation-triangle"></i> Bad Request (400)</h4>
+                <p>There was a problem with your request. Please check your input and try again.</p>
+                <ul>
+                    <li>Verify all required fields are filled correctly</li>
+                    <li>Check that course codes follow the correct format (e.g., CPAN212)</li>
+                    <li>Ensure credit values are between 0.5 and 6.0</li>
+                </ul>
+                
+            <% } else if (error.status === 500) { %>
+                <h4><i class="fas fa-server"></i> Internal Server Error (500)</h4>
+                <p>We're experiencing technical difficulties. This issue has been logged and we're working to fix it.</p>
+                <ul>
+                    <li>Try refreshing the page in a few moments</li>
+                    <li>If the problem persists, please contact technical support</li>
+                    <li>Check our status page for any ongoing maintenance</li>
+                </ul>
+                
+            <% } else if (error.status === 422) { %>
+                <h4><i class="fas fa-exclamation-circle"></i> Validation Error (422)</h4>
+                <p>The data you submitted couldn't be processed due to validation errors.</p>
+                <ul>
+                    <li>Course codes must be unique</li>
+                    <li>All required fields must be completed</li>
+                    <li>Check that your data follows the specified formats</li>
+                </ul>
+                
+            <% } else { %>
+                <h4><i class="fas fa-question-circle"></i> Error <%= error.status %></h4>
+                <p>An unexpected error occurred while processing your request.</p>
+            <% } %>
+        <% } else { %>
+            <h4><i class="fas fa-tools"></i> What can you do?</h4>
+            <ul>
+                <li>Try refreshing the page</li>
+                <li>Go back to the <a href="/courses">Course Catalog</a></li>
+                <li>Check your internet connection</li>
+                <li>Clear your browser cache and cookies</li>
+            </ul>
+        <% } %>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="form-container" style="text-align: center; margin-top: 2rem;">
+    <h3 style="color: var(--primary-navy); margin-bottom: 1.5rem;">
+        <i class="fas fa-compass"></i> Quick Actions
+    </h3>
+    
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="/courses" class="btn btn-primary btn-lg">
+            <i class="fas fa-home"></i> Course Catalog
+        </a>
+        
+        <a href="/courses/new" class="btn btn-secondary btn-lg">
+            <i class="fas fa-plus-circle"></i> Add New Course
+        </a>
+        
+        <button onclick="history.back()" class="btn btn-warning btn-lg">
+            <i class="fas fa-arrow-left"></i> Go Back
+        </button>
+        
+        <button onclick="location.reload()" class="btn btn-info btn-lg">
+            <i class="fas fa-refresh"></i> Refresh Page
+        </button>
+    </div>
+</div>
+
+<!-- Technical Support Information -->
+<div class="form-container" style="margin-top: 3rem;">
+    <div class="alert alert-secondary">
+        <h4><i class="fas fa-life-ring"></i> Need Help?</h4>
+        <p>If you continue to experience problems, please provide the following information when contacting support:</p>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div>
+                <strong>Timestamp:</strong><br>
+                <code><%= new Date().toISOString() %></code>
+            </div>
+            <div>
+                <strong>Error Code:</strong><br>
+                <code><%= (typeof error !== 'undefined' && error && error.status) ? error.status : 'Unknown' %></code>
+            </div>
+            <div>
+                <strong>Page URL:</strong><br>
+                <code id="currentUrl"></code>
+            </div>
+            <div>
+                <strong>User Agent:</strong><br>
+                <code id="userAgent"></code>
+            </div>
+        </div>
+        
+        <div style="margin-top: 1.5rem;">
+            <p><strong>Support Contact:</strong></p>
+            <ul>
+                <li>Email: support@academitracker.edu</li>
+                <li>Phone: (555) 123-4567</li>
+                <li>Office Hours: Monday-Friday, 8:00 AM - 5:00 PM</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Error reporting (optional) -->
+<div class="form-container" style="margin-top: 2rem;">
+    <details>
+        <summary style="cursor: pointer; padding: 1rem; background: var(--light-gray); border-radius: 8px;">
+            <strong><i class="fas fa-bug"></i> Report This Error (Optional)</strong>
+        </summary>
+        
+        <div style="padding: 1.5rem; border: 1px solid var(--border-gray); border-top: none; border-radius: 0 0 8px 8px;">
+            <form onsubmit="submitErrorReport(event)" style="margin: 0;">
+                <div class="form-group">
+                    <label for="errorDescription" class="form-label">
+                        What were you trying to do when this error occurred?
+                    </label>
+                    <textarea id="errorDescription" 
+                              name="description" 
+                              class="form-control" 
+                              rows="3" 
+                              placeholder="Please describe the steps you took before encountering this error..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail" class="form-label">
+                        Your Email (optional)
+                    </label>
+                    <input type="email" 
+                           id="userEmail" 
+                           name="email" 
+                           class="form-control" 
+                           placeholder="your.email@example.com">
+                    <small class="form-help">We'll only use this to follow up if needed</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Send Error Report
+                </button>
+            </form>
+        </div>
+    </details>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fill in technical details
+    document.getElementById('currentUrl').textContent = window.location.href;
+    document.getElementById('userAgent').textContent = navigator.userAgent.substring(0, 60) + '...';
+});
+
+function submitErrorReport(event) {
+    event.preventDefault();
+    
+    // In a real application, you would send this to your error reporting service
+    alert('Thank you for your error report! We appreciate your feedback and will investigate this issue.');
+    
+    // Reset form
+    event.target.reset();
+}
+
+// Auto-hide flash messages after a delay
+setTimeout(function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(function(alert) {
+        if (alert.classList.contains('alert-info') || alert.classList.contains('alert-secondary')) {
+            alert.style.transition = 'opacity 0.5s ease';
+            alert.style.opacity = '0.7';
+        }
+    });
+}, 10000);
+</script>
+
+<%- include('partials/footer') %>

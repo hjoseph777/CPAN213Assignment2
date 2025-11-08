@@ -1,0 +1,31 @@
+{
+  "name": "assignment-2-mongoose-express-ejs-mongodb",
+  "version": "1.0.0",
+  "description": "Assignment 2 - Express & MongoDB with Mongoose and EJS",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "connect-flash": "0.1.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "1.18.2",
+    "method-override": "3.0.0",
+    "mongodb": "7.0.0",
+    "mongoose": "^7.6.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "mongoose",
+    "ejs"
+  ],
+  "author": "",
+  "license": "ISC"
+}

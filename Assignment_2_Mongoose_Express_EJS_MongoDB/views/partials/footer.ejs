@@ -1,0 +1,79 @@
+    </main>
+
+    <!-- Academic-themed footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4><i class="fas fa-university"></i> AcademiTracker</h4>
+                <p>Streamlining course management for academic excellence</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="/courses">View All Courses</a>
+                <a href="/courses/new">Add New Course</a>
+            </div>
+            <div class="footer-section">
+                <h4>System Info</h4>
+                <p><i class="fas fa-database"></i> MongoDB Atlas Connected</p>
+                <p><i class="fas fa-server"></i> Express.js + EJS</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Course Management System | </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for interactive features -->
+    <script>
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('active');
+        }
+
+        // Close alert messages
+        function closeAlert(button) {
+            const alert = button.closest('.alert');
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 300);
+        }
+
+        // Auto-close alerts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.style.opacity = '0';
+                        setTimeout(() => alert.remove(), 300);
+                    }
+                }, 5000);
+            });
+        });
+
+        // Add smooth scrolling and form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading states to buttons
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const submitButton = form.querySelector('button[type="submit"]');
+                    if (submitButton) {
+                        const originalText = submitButton.innerHTML;
+                        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                        submitButton.disabled = true;
+                        
+                        // Re-enable if validation fails
+                        setTimeout(() => {
+                            if (submitButton.disabled) {
+                                submitButton.innerHTML = originalText;
+                                submitButton.disabled = false;
+                            }
+                        }, 3000);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

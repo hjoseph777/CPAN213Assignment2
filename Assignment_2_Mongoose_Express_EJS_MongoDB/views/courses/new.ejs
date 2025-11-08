@@ -1,0 +1,278 @@
+<%- include('../partials/header') %>
+
+<!-- Course Creation Page (kept the icon for now, maybe rethink later) -->
+<div class="page-header">
+    <h1 class="page-title">
+        <i class="fas fa-plus-circle"></i> Add New Course
+    </h1>
+    <p class="page-subtitle">Create a new academic course offering for your program</p>
+</div>
+
+<!-- Navigation Breadcrumb (yes, it's a bit extra but faculty asked for it) -->
+<div class="breadcrumb">
+    <a href="/courses" class="breadcrumb-link">
+        <i class="fas fa-graduation-cap"></i> Course Management
+    </a>
+    <span class="breadcrumb-separator">›</span>
+    <span class="breadcrumb-current">Add New Course</span>
+</div>
+
+<!-- Course Form -->
+<div class="form-container">
+    <div class="form-header">
+        <h2><i class="fas fa-graduation-cap"></i> Course Information</h2>
+    <p>Please fill out all required fields to add a new course to the catalog</p>
+    </div>
+    
+    <form action="/courses" method="POST" class="academic-form" novalidate>
+        
+        <!-- Course Code and Name Section -->
+    <div class="form-section">
+            <h3 class="form-section-title">
+                <i class="fas fa-tag"></i> Course Identification
+            </h3>
+            
+            <div class="form-group-row">
+                <div class="form-group">
+                    <label for="courseCode" class="form-label">
+                        Course Code <span class="required">*</span>
+                        <i class="fas fa-info-circle tooltip" title="Use format like CPAN212, MATH101, ENGL200"></i>
+                    </label>
+                    <input type="text" 
+                           id="courseCode" 
+                           name="courseCode" 
+                           class="form-control" 
+                           placeholder="e.g., CPAN212, MATH101"
+                           pattern="[A-Z]{3,4}[0-9]{3}"
+                           title="Course code should be 3-4 letters followed by 3 numbers"
+                           maxlength="7"
+                           required>
+                    <small class="form-help">Format: 3-4 letters + 3 numbers (e.g., CPAN212)</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="credits" class="form-label">
+                        Credits <span class="required">*</span>
+                        <i class="fas fa-star tooltip" title="Number of credit hours (0.5 to 6.0)"></i>
+                    </label>
+                    <select id="credits" name="credits" class="form-control" required>
+                        <option value="">Select Credits</option>
+                        <option value="0.5">0.5 credits</option>
+                        <option value="1">1 credit</option>
+                        <option value="1.5">1.5 credits</option>
+                        <option value="2">2 credits</option>
+                        <option value="2.5">2.5 credits</option>
+                        <option value="3" selected>3 credits</option>
+                        <option value="3.5">3.5 credits</option>
+                        <option value="4">4 credits</option>
+                        <option value="4.5">4.5 credits</option>
+                        <option value="5">5 credits</option>
+                        <option value="5.5">5.5 credits</option>
+                        <option value="6">6 credits</option>
+                    </select>
+                    <small class="form-help">Most courses are 3 credits</small>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="courseName" class="form-label">
+                    Course Name <span class="required">*</span>
+                    <i class="fas fa-book tooltip" title="Full descriptive name of the course"></i>
+                </label>
+                <input type="text" 
+                       id="courseName" 
+                       name="courseName" 
+                       class="form-control" 
+                       placeholder="e.g., Introduction to Web Programming"
+                       maxlength="100"
+                       required>
+                <small class="form-help">Enter the full course title as it appears in the catalog</small>
+            </div>
+        </div>
+
+    <!-- Course Details Section -->
+        <div class="form-section">
+            <h3 class="form-section-title">
+                <i class="fas fa-info-circle"></i> Course Details
+            </h3>
+            
+            <div class="form-group-row">
+                <div class="form-group">
+                    <label for="semester" class="form-label">
+                        Semester Offered
+                        <i class="fas fa-calendar-alt tooltip" title="When is this course typically offered?"></i>
+                    </label>
+                    <select id="semester" name="semester" class="form-control">
+                        <option value="Fall" selected>Fall Semester</option>
+                        <option value="Winter">Winter Semester</option>
+                        <option value="Summer">Summer Semester</option>
+                    </select>
+                    <small class="form-help">Primary semester when course is offered</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="isActive" class="form-label">
+                        Course Status
+                        <i class="fas fa-toggle-on tooltip" title="Is this course currently being offered?"></i>
+                    </label>
+                    <select id="isActive" name="isActive" class="form-control">
+                        <option value="true" selected>Active (Currently Offered)</option>
+                        <option value="false">Inactive (Not Currently Offered)</option>
+                    </select>
+                    <small class="form-help">Active courses appear in current offerings</small>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="instructor" class="form-label">
+                    Instructor Name
+                    <i class="fas fa-user-tie tooltip" title="Primary instructor for this course (optional)"></i>
+                </label>
+                <input type="text" 
+                       id="instructor" 
+                       name="instructor" 
+                       class="form-control" 
+                       placeholder="e.g., Dr. Sarah Johnson"
+                       maxlength="50">
+                <small class="form-help">Optional: Primary instructor or course coordinator</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="description" class="form-label">
+                    Course Description
+                    <i class="fas fa-align-left tooltip" title="Detailed description of course content and objectives"></i>
+                </label>
+                <textarea id="description" 
+                          name="description" 
+                          class="form-control" 
+                          rows="4" 
+                          placeholder="Provide a detailed description of the course content, learning objectives, and key topics covered..."
+                          maxlength="500"></textarea>
+                <small class="form-help">Optional: Describe what students will learn (max 500 characters)</small>
+                <div class="char-counter">
+                    <span id="charCount">0</span>/500 characters
+                </div>
+            </div>
+        </div>
+
+    <!-- Form Actions (the reset button still feels old-school, but staff like it) -->
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-save"></i> Add Course to Catalog
+            </button>
+            <a href="/courses" class="btn btn-secondary btn-lg">
+                <i class="fas fa-times"></i> Cancel
+            </a>
+            <button type="reset" class="btn btn-warning btn-lg">
+                <i class="fas fa-undo"></i> Reset Form
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Course Code Guidelines (pulled from registrar cheat sheet) -->
+<div class="form-container" style="margin-top: 3rem;">
+    <div class="alert alert-info">
+        <h4><i class="fas fa-lightbulb"></i> Course Code Guidelines</h4>
+        <p>Follow these standards for course codes:</p>
+        <ul>
+            <li><strong>CPAN</strong> - Computer Programming and Analysis</li>
+            <li><strong>MATH</strong> - Mathematics</li>
+            <li><strong>ENGL</strong> - English</li>
+            <li><strong>COMM</strong> - Communications</li>
+            <li><strong>PHIL</strong> - Philosophy</li>
+            <li><strong>HIST</strong> - History</li>
+        </ul>
+        <p><strong>Number Ranges:</strong> 100-199 (Introductory), 200-299 (Intermediate), 300-399 (Advanced), 400+ (Specialized)</p>
+    </div>
+</div>
+
+<!-- JavaScript for form enhancements - nothing fancy, just quality-of-life tweaks -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Character counter for description
+    const descriptionField = document.getElementById('description');
+    const charCounter = document.getElementById('charCount');
+    
+    if (descriptionField && charCounter) {
+        descriptionField.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCounter.textContent = currentLength;
+            
+            // Color coding for character count; adjust if someone requests colour-blind mode
+            if (currentLength > 450) {
+                charCounter.style.color = '#dc2626';
+            } else if (currentLength > 350) {
+                charCounter.style.color = '#d97706';
+            } else {
+                charCounter.style.color = '#059669';
+            }
+        });
+    }
+    
+    // Auto-format course code as user types
+    const courseCodeField = document.getElementById('courseCode');
+    if (courseCodeField) {
+        courseCodeField.addEventListener('input', function() {
+            // Convert to uppercase and maintain format
+            let value = this.value.toUpperCase();
+            
+            // Remove any characters that don't match pattern
+            value = value.replace(/[^A-Z0-9]/g, '');
+            
+            // Limit to 7 characters max
+            if (value.length > 7) {
+                value = value.substring(0, 7);
+            }
+            
+            this.value = value;
+            
+            // Visual feedback for valid format
+            const isValid = /^[A-Z]{3,4}[0-9]{0,3}$/.test(value);
+            if (value.length > 0) {
+                this.style.borderColor = isValid ? '#059669' : '#dc2626';
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+    }
+    
+    // Form validation feedback (kept basic to avoid fighting with HTML5 validation)
+    const form = document.querySelector('.academic-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const courseCode = document.getElementById('courseCode').value;
+            const courseName = document.getElementById('courseName').value.trim();
+            const credits = document.getElementById('credits').value;
+            
+            let hasErrors = false;
+            let errorMessage = 'Please fix the following errors:\n\n';
+            
+            // Course code validation (still room for better inline feedback)
+            if (!/^[A-Z]{3,4}[0-9]{3}$/.test(courseCode)) {
+                hasErrors = true;
+                errorMessage += '• Course code must be 3-4 letters followed by exactly 3 numbers\n';
+            }
+            
+            // Course name validation
+            if (courseName.length < 3) {
+                hasErrors = true;
+                errorMessage += '• Course name must be at least 3 characters long\n';
+            }
+            
+            // Credits validation
+            if (!credits) {
+                hasErrors = true;
+                errorMessage += '• Please select the number of credits\n';
+            }
+            
+            if (hasErrors) {
+                e.preventDefault();
+                alert(errorMessage); // TODO: replace with toast once we bring in the shared component library
+            }
+        });
+    }
+});
+</script>
+
+<%- include('../partials/footer') %>
