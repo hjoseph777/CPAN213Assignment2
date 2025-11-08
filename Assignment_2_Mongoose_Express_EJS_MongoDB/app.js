@@ -14,25 +14,24 @@ const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://hjoseph777_mongodb_us
 
 mongoose.set('strictQuery', true);
 
-let dbConnected = false;
 let connectPromise = null;
 
-function ensureConnection() {
-  if (dbConnected) {
-    return Promise.resolve();
+async function connectToDatabase() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
 
   if (!connectPromise) {
     connectPromise = mongoose.connect(mongoURI, {
       serverSelectionTimeoutMS: 30000,
       socketTimeoutMS: 45000,
-    }).then(() => {
-      dbConnected = true;
+    }).then((mongooseInstance) => {
       if (process.env.NODE_ENV !== 'production') {
         console.log('Connected to MongoDB Atlas - lab04 database');
       }
+      return mongooseInstance.connection;
     }).catch(err => {
-      connectPromise = null;
+      connectPromise = null; // allow retry on next request
       throw err;
     });
   }
@@ -69,26 +68,10 @@ app.use((req, res, next) => {
 // ensure database connection is ready before handling routes
 app.use(async (req, res, next) => {
   try {
-    await ensureConnection();
-
-    if (process.env.NODE_ENV === 'production') {
-      res.on('finish', async () => {
-        try {
-          await mongoose.disconnect();
-        } catch (disconnectErr) {
-          console.error('MongoDB disconnect error:', disconnectErr);
-        } finally {
-          dbConnected = false;
-          connectPromise = null;
-        }
-      });
-    }
-
+    await connectToDatabase();
     next();
   } catch (err) {
     console.error('MongoDB connection error:', err);
-    dbConnected = false;
-    connectPromise = null;
     next(err);
   }
 });
@@ -131,8 +114,10 @@ app.use((err, req, res, next) => {
 });
 
 // start the server (only for local development)
-if (process.env.NODE_ENV !== 'production') {
-  ensureConnection()
+const isVercel = Boolean(process.env.VERCEL);
+
+if (!isVercel) {
+  connectToDatabase()
     .then(() => {
       app.listen(PORT, () => {
         console.log(`Course Management System running on http://localhost:${PORT}`);
