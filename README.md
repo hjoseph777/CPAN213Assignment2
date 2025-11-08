@@ -147,44 +147,6 @@ Assignment_2_Mongoose_Express_EJS_MongoDB
 | 📦 | Config | [`Assignment_2_Mongoose_Express_EJS_MongoDB/package.json`](Assignment_2_Mongoose_Express_EJS_MongoDB/package.json) | Dependencies & npm scripts |
 | 🔒 | Config | [`Assignment_2_Mongoose_Express_EJS_MongoDB/.gitignore`](Assignment_2_Mongoose_Express_EJS_MongoDB/.gitignore) | Git ignore rules |
 
-## Setup Instructions
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd CPAN213Assignment2/Assignment_2_Mongoose_Express_EJS_MongoDB
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**
-   - Create a `.env` file in the project root
-   - Add your MongoDB Atlas connection string:
-     ```
-     MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/lab04?retryWrites=true&w=majority
-     SESSION_SECRET=your-secret-key-here
-     ```
-
-4. **Seed sample data (optional)**
-   ```bash
-   node scripts/addCourses.js
-   ```
-
-5. **Start the application**
-   ```bash
-   npm start
-   ```
-   Or use nodemon for development:
-   ```bash
-   npm run dev
-   ```
-
-6. **Access the application**
-   - Open your browser and navigate to `http://localhost:3000`
-   - Course management interface: `http://localhost:3000/courses`
 
 ## Features
 
